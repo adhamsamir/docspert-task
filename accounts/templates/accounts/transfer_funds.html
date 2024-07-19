@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transfer Funds</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1A2C45;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #ffffff;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 2em;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            color: #1A2C45;
+        }
+        h2 {
+            color: #1A2C45;
+            margin-bottom: 1em;
+        }
+        .form-group {
+            margin-bottom: 1em;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5em;
+            font-weight: bold;
+        }
+        .form-group input, .form-group select {
+            width: calc(100% - 2em);
+            padding: 0.5em;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .button {
+            padding: 0.75em 1.5em;
+            color: #fff;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 1em;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        .popup.success {
+            background-color: #28a745;
+        }
+        .popup.error {
+            background-color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Transfer Funds</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="from_account">From Account:</label>
+                {{ form.from_account }}
+            </div>
+            <div class="form-group">
+                <label for="to_account">To Account:</label>
+                {{ form.to_account }}
+            </div>
+            <div class="form-group">
+                <label for="amount">Amount:</label>
+                {{ form.amount }}
+            </div>
+            <button type="submit" class="button">Transfer</button>
+        </form>
+    </div>
+
+    <div id="popup" class="popup"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const popup = document.getElementById('popup');
+            {% if messages %}
+                {% for message in messages %}
+                    popup.textContent = "{{ message }}";
+                    popup.classList.add('{{ message.tags }}');
+                    popup.style.display = 'block';
+                    setTimeout(function() {
+                        popup.style.display = 'none';
+                    }, 2000);
+                {% endfor %}
+            {% endif %}
+        });
+    </script>
+</body>
+</html>
